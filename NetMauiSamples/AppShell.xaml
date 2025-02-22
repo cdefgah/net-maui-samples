@@ -3,13 +3,10 @@
     x:Class="NetMauiSamples.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:NetMauiSamples"
+    xmlns:views="clr-namespace:NetMauiSamples.Views"
     Shell.FlyoutBehavior="Flyout"
-    Title="NetMauiSamples">
+    Title=".Net Maui Samples">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <ShellContent ContentTemplate="{DataTemplate views:MainPage}" />
 
 </Shell>

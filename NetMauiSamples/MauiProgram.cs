@@ -3,9 +3,11 @@
 using Microsoft.Extensions.Logging;
 
 using NetMauiSamples.Services;
+using NetMauiSamples.Shared.Services;
 using NetMauiSamples.Shared.Services.Interfaces;
 using NetMauiSamples.Shared.ViewModels;
 using NetMauiSamples.Shared.ViewModels.Base;
+using NetMauiSamples.Views;
 
 namespace NetMauiSamples;
 
@@ -43,6 +45,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IErrorHandler, ErrorHandler>();
         builder.Services.AddSingleton<IInvocationService, InvocationService>();
         builder.Services.AddSingleton<INavigationProvider, NavigationProvider>();
+        builder.Services.AddSingleton<IPageEventHandler, PageEventHandler>();
 
         // and registering platform dependent services afterwards
         RegisterPlatformDependentUtilityServices(builder);
