@@ -1,25 +1,79 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
 
-namespace NetMauiSamples
+using Microsoft.Extensions.Logging;
+
+using NetMauiSamples.Services;
+using NetMauiSamples.Shared.Services.Interfaces;
+using NetMauiSamples.Shared.ViewModels;
+using NetMauiSamples.Shared.ViewModels.Base;
+
+namespace NetMauiSamples;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
+        
+        builder.RegisterServices();
+        return builder.Build();
+    }
 
-            return builder.Build();
-        }
+    private static void RegisterServices(this MauiAppBuilder builder)
+    {
+        RegisterUtilityServices(builder);
+        RegisterViewModelsAndPages(builder);
+    }
+
+    private static void RegisterUtilityServices(MauiAppBuilder builder)
+    {
+        // registering platform-agnostic utility services here
+        builder.Services.AddSingleton<IErrorHandler, ErrorHandler>();
+        builder.Services.AddSingleton<IInvocationService, InvocationService>();
+        builder.Services.AddSingleton<INavigationProvider, NavigationProvider>();
+
+        // and registering platform dependent services afterwards
+        RegisterPlatformDependentUtilityServices(builder);
+    }
+
+    private static void RegisterPlatformDependentUtilityServices(MauiAppBuilder builder)
+    {
+#if WINDOWS
+
+#elif MACCATALYST
+
+#elif ANDROID
+
+#elif IOS
+
+#elif TIZEN
+
+#else
+     throw new PlatformNotSupportedException($"Unsupported platform {DeviceInfo.Platform} upon registering platform dependent utility services!");
+#endif
+    }
+
+    private static void RegisterViewModelsAndPages(MauiAppBuilder builder)
+    {
+        builder.RegisterPageAndViewModel<MainPage, MainViewModel>();
+    }
+
+    private static void RegisterPageAndViewModel<TPage, TViewModel>(this MauiAppBuilder builder)
+                                                                    where TViewModel : ViewModelBase where TPage : Page
+    {
+        builder.Services.AddTransient<TPage>();
+        builder.Services.AddTransient<TViewModel>();
     }
 }
