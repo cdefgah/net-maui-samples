@@ -33,10 +33,12 @@ public static class MauiProgram
         return builder.Build();
     }
 
-    private static void RegisterServices(this MauiAppBuilder builder)
+    private static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
     {
         RegisterUtilityServices(builder);
         RegisterViewModelsAndPages(builder);
+
+        return builder;
     }
 
     private static void RegisterUtilityServices(MauiAppBuilder builder)
