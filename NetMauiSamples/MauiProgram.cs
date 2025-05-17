@@ -2,6 +2,8 @@
 
 using Microsoft.Extensions.Logging;
 
+using Mopups.Hosting;
+
 using NetMauiSamples.Services;
 using NetMauiSamples.Shared.Services;
 using NetMauiSamples.Shared.Services.Interfaces;
@@ -23,7 +25,8 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });
+            })
+            .ConfigureMopups();
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -44,10 +47,12 @@ public static class MauiProgram
     private static void RegisterUtilityServices(MauiAppBuilder builder)
     {
         // registering platform-agnostic utility services here
+        builder.Services.AddSingleton<IEmailService, EmailService>();
         builder.Services.AddSingleton<IErrorHandler, ErrorHandler>();
         builder.Services.AddSingleton<IInvocationService, InvocationService>();
         builder.Services.AddSingleton<INavigationProvider, NavigationProvider>();
         builder.Services.AddSingleton<IPageEventHandler, PageEventHandler>();
+        builder.Services.AddSingleton<IPopupBoxService, PopupBoxService>();
 
         // and registering platform dependent services afterwards
         RegisterPlatformDependentUtilityServices(builder);
